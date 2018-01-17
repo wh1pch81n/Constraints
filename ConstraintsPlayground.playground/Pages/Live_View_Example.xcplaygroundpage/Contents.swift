@@ -2,7 +2,7 @@
 
 import UIKit
 import PlaygroundSupport
-@testable import Constraints
+@testable import Constraint
 //import WBMDCommonFramework
 
 ////////
