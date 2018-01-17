@@ -7,12 +7,34 @@
 //
 
 import UIKit
+import Constraint
 
 class ViewController: UIViewController {
 
+    var redView: UIView!
+    var blueView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        redView = UIView()
+        redView.backgroundColor = UIColor.red
+        
+        blueView = UIView()
+        blueView.backgroundColor = UIColor.blue
+        
+        view.addSubview(redView)
+        view.addSubview(blueView)
+        
+        () |-* 10 *-* redView *-* blueView.length(equalTo: 30) *-* 26 *-| ()
+            *->> Constraint.Apply(to: view, direction: .horizontal)
+        
+    
+        () |-* 20 *-* redView *-* 20 *-| ()
+            *->> Constraint.Apply(to: view, direction: .vertical)
+        () |-* 20 *-* blueView *-* 20 *-| ()
+            *->> Constraint.Apply(to: view, direction: .vertical)
+
     }
 
     override func didReceiveMemoryWarning() {
