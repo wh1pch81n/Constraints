@@ -20,12 +20,12 @@ public indirect enum Constraint {
 
 extension Constraint {
     
-    public func addConstraints(to view: UIView, direction: Direction, with options: NSLayoutFormatOptions = NSLayoutFormatOptions()) {
+    public func addConstraints(to view: UIView, direction: Direction, with options: NSLayoutConstraint.FormatOptions = NSLayoutConstraint.FormatOptions()) {
         view.addConstraints(self.toNSLayoutConstraints(direction, with: options))
     }
     
     public func toNSLayoutConstraints(_ direction: Direction
-        , with options: NSLayoutFormatOptions = NSLayoutFormatOptions()) -> [NSLayoutConstraint]
+        , with options: NSLayoutConstraint.FormatOptions = NSLayoutConstraint.FormatOptions()) -> [NSLayoutConstraint]
     {
         var n = 0
         let pc = produceConstraints(view_index: &n)

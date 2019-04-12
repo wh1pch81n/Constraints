@@ -58,11 +58,11 @@ extension NSObject {
         return previous
     }
     
-    @objc private static func _constraint_toNSLayoutConstraintsHorizontally(_ previous: Any, withOptions options: NSLayoutFormatOptions) -> [NSLayoutConstraint] {
+    @objc private static func _constraint_toNSLayoutConstraintsHorizontally(_ previous: Any, withOptions options: NSLayoutConstraint.FormatOptions) -> [NSLayoutConstraint] {
         return (previous as? Constraint)?.toNSLayoutConstraints(.horizontal, with: options) ?? []
     }
     
-    @objc private static func _constraint_toNSLayoutConstraintsVertically(_ previous: Any, withOptions options: NSLayoutFormatOptions) -> [NSLayoutConstraint] {
+    @objc private static func _constraint_toNSLayoutConstraintsVertically(_ previous: Any, withOptions options: NSLayoutConstraint.FormatOptions) -> [NSLayoutConstraint] {
         return (previous as? Constraint)?.toNSLayoutConstraints(.vertical, with: options) ?? []
     }
     
