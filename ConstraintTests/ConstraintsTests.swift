@@ -14,14 +14,15 @@ class ConstraintsTests: XCTestCase {
         super.tearDown()
     }
     
-//    func testFormatString_usingConstraintType() {
-//        let dummyView = UIView()
-//        let arr: [(input: Constraint, output: String)] = [
-//            (input: Constraint.view(dummyView, length: Constraint.Relation.equal(to: Constraint.Scalar.int(4))), output: "[view_0(==4)]")
-//        ]
-//
-//        testFormatStrings(with: arr, block: { (r, e) in XCTAssertEqual(r, e) })
-//    }
+    func testFormatString_usingConstraintType() {
+        let dummyView = UIView()
+        let arr: [(input: Constraint, output: String)] = [
+            (input: Constraint.view(dummyView, length: Constraint.Relation.equal(to: Constraint.Scalar.int(4))), output: "[view_0(==4)]")
+        ]
+
+        testFormatStrings(with: arr, block: { (r, e) in XCTAssertEqual(r, e) })
+    }
+    
     func testAppendConstraint() {
         do {
             var c: Constraint = Constraint.leading
@@ -75,6 +76,8 @@ class ConstraintsTests: XCTestCase {
             (input: 1.23 *-| (), output: "(==1.23)-|"),
             (input: dummyView *-| (), output: "[view_0]-|"),
             (input: ==5 *-| (), output: "(==5)-|"),
+            (input: <=5 *-| (), output: "(<=5)-|"),
+            (input: >=5 *-| (), output: "(>=5)-|"),
             (input: ==5.with(priority: 999) *-| (), output: "(==5@999)-|"),
             (input: >=5.with(priority: 999) *-| (), output: "(>=5@999)-|"),
             (input: >=5.9.with(priority: 999) *-| (), output: "(>=5.9@999)-|"),
@@ -82,6 +85,8 @@ class ConstraintsTests: XCTestCase {
             (input: () |-* dummyView *-| (), output: "|-[view_0]-|"),
             (input: () |-* dummyView *-* 9 *-| (), output: "|-[view_0]-(==9)-|"),
             (input: () |-* 9 *-* dummyView *-| (), output: "|-(==9)-[view_0]-|"),
+            (input: () |-* dummyView *-* 5.5 *-| (), output: "|-[view_0]-(==5.5)-|"),
+            (input: () |-* 1.2 *-* dummyView *-| (), output: "|-(==1.2)-[view_0]-|"),
 
             (input: () |-* dummyView *-* >=9 *-| (), output: "|-[view_0]-(>=9)-|"),
             (input: () |-* >=9 *-* dummyView *-| (), output: "|-(>=9)-[view_0]-|"),
@@ -98,6 +103,8 @@ class ConstraintsTests: XCTestCase {
             (input: dummyView.length(lessThanOrEqualTo: 6.7), output: "[view_0(<=6.7)]"),
             (input: dummyView.length(equalTo: UIView()), output: "[view_0(==view_1)]"),
 
+            (input: () |-* 8 *-* dummyView.length(equalTo: 25) *-* >=8 *-| (), output: "|-(==8)-[view_0(==25)]-(>=8)-|"),
+            (input: () |-* 8 *-* dummyView.length(equalTo: 25) *-* >=8.with(priority: 998) *-| (), output: "|-(==8)-[view_0(==25)]-(>=8@998)-|"),
         ]
         
         testFormatStrings(with: arr, block: { (r, e) in XCTAssertEqual(r, e) })

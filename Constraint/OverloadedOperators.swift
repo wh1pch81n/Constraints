@@ -14,17 +14,22 @@ public func |-*(lhs: Void, rhs: Constraint) -> Constraint {
     return Constraint.leading.appended(rhs)
 }
 
+public func |-*(lhs: Void, rhs: UIView) -> Constraint {
+    return () |-* Constraint.view(rhs, length: nil)
+}
+
+public func |-*(lhs: Void, rhs: Constraint.Scalar) -> Constraint {
+    return () |-* Constraint.spacer(length: Constraint.Relation.equal(to: rhs))
+}
+
 public func |-*(lhs: Void, rhs: Int) -> Constraint {
-    return Constraint.leading.appended(Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.int(rhs))))
+    return () |-* Constraint.Scalar.int(rhs)
 }
 
 public func |-*(lhs: Void, rhs: CGFloat) -> Constraint {
-    return Constraint.leading.appended(Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.cgfloat(rhs))))
+    return () |-* Constraint.Scalar.cgfloat(rhs)
 }
 
-public func |-*(lhs: Void, rhs: UIView) -> Constraint {
-    return Constraint.leading.appended(Constraint.view(rhs, length: nil))
-}
 
 // MARK: -
 
@@ -34,20 +39,22 @@ public func *-|(lhs: Constraint, rhs: Void) -> Constraint {
     return lhs.appended(Constraint.trailing)
 }
 
+public func *-|(lhs: UIView, rhs: Void) -> Constraint {
+    return Constraint.view(lhs, length: nil) *-| ()
+}
+
+public func *-|(lhs: Constraint.Scalar, rhs: Void) -> Constraint {
+    return Constraint.spacer(length: Constraint.Relation.equal(to: lhs)) *-| ()
+}
+
 public func *-|(lhs: Int, rhs: Void) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.int(lhs)))
-        .appended(Constraint.trailing)
+    return Constraint.Scalar.int(lhs) *-| ()
 }
 
 public func *-|(lhs: CGFloat, rhs: Void) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.cgfloat(lhs)))
-        .appended(Constraint.trailing)
+    return Constraint.Scalar.cgfloat(lhs) *-| ()
 }
 
-public func *-|(lhs: UIView, rhs: Void) -> Constraint {
-    return Constraint.view(lhs, length: nil)
-        .appended(Constraint.trailing)
-}
 
 // MARK: -
 
@@ -58,11 +65,19 @@ public func *-*(lhs: Constraint, rhs: Constraint) -> Constraint {
 }
 
 public func *-*(lhs: Constraint, rhs: UIView) -> Constraint {
-    return lhs.appended(Constraint.view(rhs, length: nil))
+    return lhs *-* Constraint.view(rhs, length: nil)
+}
+
+public func *-*(lhs: Constraint, rhs: Constraint.Scalar) -> Constraint {
+    return lhs *-* Constraint.spacer(length: Constraint.Relation.equal(to: rhs))
 }
 
 public func *-*(lhs: Constraint, rhs: Int) -> Constraint {
-    return lhs.appended(Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.int(rhs))))
+    return lhs *-* Constraint.Scalar.int(rhs)
+}
+
+public func *-*(lhs: Constraint, rhs: CGFloat) -> Constraint {
+    return lhs *-* Constraint.Scalar.cgfloat(rhs)
 }
 
 
@@ -70,49 +85,52 @@ public func *-*(lhs: Constraint, rhs: Int) -> Constraint {
 
 prefix operator ==
 
-public prefix func ==(rhs: CGFloat) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.cgfloat(rhs)))
-}
-
-public prefix func ==(rhs: Int) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.equal(to: Constraint.Scalar.int(rhs)))
-}
-
 public prefix func ==(rhs: Constraint.Scalar) -> Constraint {
     return Constraint.spacer(length: Constraint.Relation.equal(to: rhs))
 }
+
+public prefix func ==(rhs: CGFloat) -> Constraint {
+    return ==Constraint.Scalar.cgfloat(rhs)
+}
+
+public prefix func ==(rhs: Int) -> Constraint {
+    return ==Constraint.Scalar.int(rhs)
+}
+
 
 // MARK: -
 
 prefix operator <=
 
-public prefix func <=(rhs: CGFloat) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.lessThanOrEqual(to: Constraint.Scalar.cgfloat(rhs)))
-}
-
-public prefix func <=(rhs: Int) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.lessThanOrEqual(to: Constraint.Scalar.int(rhs)))
-}
-
 public prefix func <=(rhs: Constraint.Scalar) -> Constraint {
     return Constraint.spacer(length: Constraint.Relation.lessThanOrEqual(to: rhs))
 }
+
+public prefix func <=(rhs: CGFloat) -> Constraint {
+    return <=Constraint.Scalar.cgfloat(rhs)
+}
+
+public prefix func <=(rhs: Int) -> Constraint {
+    return <=Constraint.Scalar.int(rhs)
+}
+
 
 // MARK: -
 
 prefix operator >=
 
-public prefix func >=(rhs: Int) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.greaterThanOrEqual(to: Constraint.Scalar.int(rhs)))
-}
-
-public prefix func >=(rhs: CGFloat) -> Constraint {
-    return Constraint.spacer(length: Constraint.Relation.greaterThanOrEqual(to: Constraint.Scalar.cgfloat(rhs)))
-}
-
 public prefix func >=(rhs: Constraint.Scalar) -> Constraint {
     return Constraint.spacer(length: Constraint.Relation.greaterThanOrEqual(to: rhs))
 }
+
+public prefix func >=(rhs: Int) -> Constraint {
+    return >=Constraint.Scalar.int(rhs)
+}
+
+public prefix func >=(rhs: CGFloat) -> Constraint {
+    return >=Constraint.Scalar.cgfloat(rhs)
+}
+
 
 // MARK: -
 
